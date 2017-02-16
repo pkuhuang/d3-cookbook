@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>array_as_data</title>
+    <style type="text/css">
+    .h-bar {
+        min-height: 15px;
+        min-width: 10px;
+        background-color: red;
+        margin-bottom: 2px;
+        font-size: 11px;
+        color: #f0f8ff;
+        text-align: right;
+        padding-right: 2px;
+    }
+    </style>
+    <!-- <script type="text/javascript" src="../../../lib/d3.js"></script> -->
+    <script type="text/javascript" src="http://cdn.bootcss.com/d3/4.5.0/d3.js"></script>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
+data = [10, 15, 30, 50, 80, 65, 55, 30, 20, 10, 8]; // <- A
+
+
+var render = function() {
+    //Enter
+    var selection = d3.select("body").selectAll("div.h-bar")
+        .data(data);
+
+    selection
+        .enter()
+        .append("div")
+        .attr("class", "h-bar")
+        .append("span");
+
+
+    //Update
+    d3.select("body").selectAll("div.h-bar")
+        .data(data)
+        .style("width", function(d, i) {
+            return d * 3 + 'px';
+        })
+        .select('span')
+        .text(function(d, i) {
+            return d;
+        });
+
+    //Exit
+    selection
+        .exit()
+        .remove();
+};
+
+// setInterval(function() {
+//     data.shift();
+//     data.push(Math.round(Math.random() * 100));
+//     render();
+// }, 300);
+
+
+render()
+</script>
+
+</html>

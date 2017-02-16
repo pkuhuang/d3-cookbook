@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Bubble Transition</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script type="text/javascript" src="d3.js"></script>
+    <style type="text/css">
+    #vis {
+        margin-left: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="vis"></div>
+    <script type="text/javascript">
+    var id = 0,
+        data = [],
+        duration = 500,
+        chartHeight = 100,
+        chartWidth = 680;
+
+    function push(data) {
+        data.push(Math.round(Math.random() * (chartHeight - 10) + 10));
+    }
+
+    for (var i = 0; i < 20; i++) push(data);
+
+
+    console.log(data);
+
+
+    function render(data) {
+        var selection = d3.select("div#vis")
+            .selectAll("div.v-bar")
+            .data(data); // <-A
+
+        // enter
+        selection.enter()
+            .append("div")
+            .attr("class", "v-bar")
+            .style("top", chartHeight + "px")
+            .style("left", function(d, i) {
+                return barLeft(i + 1) + "px"; // <-B
+            })
+            .style("height", "0px") // <-C
+            .append("span");
+
+        // update
+        selection
+            .transition().duration(duration) // <-D
+            .style("top", function(d) {
+                return chartHeight - barHeight(d) + "px";
+            })
+            .style("left", function(d, i) {
+                return barLeft(i) + "px";
+            })
+            .style("height", function(d) {
+                return barHeight(d) + "px";
+            })
+            .select("span")
+            .text(function(d) {
+                return d;
+            });
+
+        // exit
+        selection.exit()
+            .transition().duration(duration) // <-E
+            .style("left", function(d, i) {
+                return barLeft(-1) + "px"; //<-F
+            })
+            .remove(); // <-G
+    }
+
+
+
+    function barLeft(i) {
+        return i * (30 + 2);
+    }
+
+    function barHeight(d) {
+        return d;
+    }
+
+    d3.select("div#vis")
+        .append("div")
+        .attr("class", "baseline")
+        .style("top", chartHeight + "px")
+        .style("left", "0px")
+        .style("width", chartWidth + "px");
+
+    render(data);
+
+    for (var i = 0; i < data.length; i++) {
+        for (var j = i; j < data.length; j++) {
+            if (data[i] >= data[j]) {
+                var tmp = data[i];
+                data[i] = data[j];
+                data[j] = tmp;
+                setInterval(function() {
+                    render(data);
+                }, 2000);
+            };
+
+        }
+    }
+    </script>
+</body>
+
+</html>

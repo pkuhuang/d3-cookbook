@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Axis Ticks</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <script type="text/javascript" src="d3.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+    var height = 500, 
+        width = 500, 
+        margin = 25,
+        axisWidth = width - 2 * margin;
+
+    var svg = d3.select('body').append('svg')
+                .attr("class", "axis")
+                .attr("height",height)
+                .attr("width", width)
+                .style("margin",margin);
+
+    var scale = d3.scaleLinear().domain([0,100]).range([0,axisWidth]);
+
+    var ticks = d3.axisBottom(scale)
+                  .ticks(5)
+                  .tickPadding(10)
+                  .tickFormat(function(v){ // <-C
+                   return v + "%";
+                  });
+
+    svg.append('g')
+        .attr('transform',function(){
+            return "translate(" + margin + "," + margin + ")";
+        })
+        .call(ticks);
+
+    svg.append('g')
+        .attr('transform',function(){
+            return "translate(" + margin + "," + margin + ")";
+        })
+        .call(d3.axisBottom(scale).ticks(25).tickFormat(function(){return ;}));
+
+</script>
+
+</body>
+
+</html>

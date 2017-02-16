@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>function as data</title>
+    <script type="text/javascript" src="http://cdn.bootcss.com/d3/4.5.0/d3.js"></script>
+    <style type="text/css">
+    .v-bar {
+        min-height: 1px;
+        min-width: 30px;
+        background-color: #4682b4;
+        margin-right: 2px;
+        font-size: 10px;
+        color: #f0f8ff;
+        text-align: center;
+        width: 10px;
+        display: inline-block;
+    }
+    </style>
+</head>
+
+<body>
+<div id="container">
+    
+
+</div>
+</body>
+<script type="text/javascript">
+var data = [];
+
+var next = function(x){
+    return x*x
+}
+
+var newData = function(){
+    data.push(next);
+    return data;
+}
+
+function render(){
+    var selection = d3.select('#container').selectAll('div').data(newData);
+
+    // Enter
+    selection.enter().append('div')
+        .attr('class','v-bar').append('span');
+
+    console.log(data);
+    // Update
+    selection
+        .style('height',function(d,i){
+        return d(i)+'px';
+    });
+
+    // Exit
+    selection.exit().remove();
+
+};
+
+setInterval(function () {
+          render();
+}, 1500);
+
+
+render();
+
+</script>
+
+</html>

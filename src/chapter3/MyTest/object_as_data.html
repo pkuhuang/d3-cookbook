@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>object as data</title>
+    <script type="text/javascript" src="http://cdn.bootcss.com/d3/4.5.0/d3.js"></script>
+    <style type="text/css">
+        .h-bar{
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    var data = [ // <- A
+        {width: 10, color: 23},{width: 15, color: 33},
+        {width: 30, color: 40},{width: 50, color: 60},
+        {width: 80, color: 22},{width: 65, color: 10},
+        {width: 55, color: 5},{width: 30, color: 30},
+        {width: 20, color: 60},{width: 10, color: 90},
+        {width: 8, color: 10}
+    ];
+
+    var colorScale = d3.scaleLinear().domain([0, 100]).range(["#add8e6", "blue"]);
+
+    var render = function(){
+
+        // Enter
+
+        d3.select('body').selectAll("div.h-bar")
+            .data(data)
+            .enter()
+            .append('div')
+            .attr('class','h-bar')
+            .append('span');
+
+        //Update
+        d3.select('body').selectAll('div.h-bar')
+            .data(data)
+            .style('width',function(d,i){
+                return d.width*3 + 'px';
+            })
+            .style('background-color',function(d,i){
+                return colorScale(d.color);
+            })
+            .select('span')
+            .text(function(d,i){
+                return d.width;
+            });
+
+        //Exit
+
+        d3.select('body').selectAll('div.h-bar')
+            .data(data)
+            .exit()
+            .remove();
+    }
+
+    render();
+    
+    setInterval(function(){
+        data.shift();
+        data.push({
+            width: Math.round(Math.random()*100),
+            color: Math.round(Math.random()*100)
+        });
+        render();
+    },2000)
+
+
+</script>
+</html>
