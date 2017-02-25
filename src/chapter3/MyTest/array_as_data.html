@@ -27,10 +27,10 @@ data = [10, 15, 30, 50, 80, 65, 55, 30, 20, 10, 8]; // <- A
 
 var render = function() {
     //Enter
-    var selection = d3.select("body").selectAll("div.h-bar")
-        .data(data);
+    var selection = d3.select("body").selectAll("div.h-bar");
 
     selection
+        .data(data)
         .enter()
         .append("div")
         .attr("class", "h-bar")
@@ -50,6 +50,7 @@ var render = function() {
 
     //Exit
     selection
+        .data()
         .exit()
         .remove();
 };
